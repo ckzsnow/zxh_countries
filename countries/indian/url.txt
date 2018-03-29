@@ -1,0 +1,10 @@
+clickapp=https://indianvisaonline.gov.in/visa/index.html
+register=https://indianvisaonline.gov.in/visa/Registration
+basicdetails=https://indianvisaonline.gov.in/visa/BasicDetails
+familydetails=https://indianvisaonline.gov.in/visa/FamilyDetails
+visadetails=https://indianvisaonline.gov.in/visa/VisaDetails
+photoupload=https://indianvisaonline.gov.in/visa/PhotoUpload
+cropphoto=https://indianvisaonline.gov.in/visa/PhotoUpload
+photoconfirm=https://indianvisaonline.gov.in/visa/PhotoUpload
+verification=https://indianvisaonline.gov.in/visa/Verification
+confirm=https://indianvisaonline.gov.in/visa/Confirmation

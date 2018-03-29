@@ -1,0 +1,141 @@
+function currentStepFinish(callback){
+	window.cefQuery({
+		request: 'CurrentStepFinish:',
+		onSuccess: function(response) {
+			callback();
+		},
+		onFailure: function(error_code, error_message) {
+			callback();
+		}
+	});
+}
+function isHidden(obj) {
+	var style = null;
+	if (window.getComputedStyle) {
+		style = window.getComputedStyle(obj, null);
+	} else { 
+		style = obj.currentStyle;
+	}
+	return (style.width=='auto');
+}
+function skipPageStep(callback, steps){
+	window.cefQuery({
+		request: 'SkipPageStep:' + steps,
+		onSuccess: function(response) {
+			callback();
+		},
+		onFailure: function(error_code, error_message) {
+			callback();
+		}
+	});
+}
+function getVisableInput() {
+	var inputList = document.querySelectorAll('input[title=\"Suburb / Town\"]');
+	for(var index=0; index<inputList.length; index++) {
+		if(!isHidden(inputList[index])) {
+			return inputList[index];
+		}
+	}
+}
+function goToNextStep() {
+	if(data.applying_stream == '31') {
+		currentStepFinish(function(){document.querySelector('button[title=\"Go to next page\"]').click();});
+	} else {
+		skipStep(function(){console.log('step13 skip 3 steps.');document.querySelector('button[title=\"Go to next page\"]').click();}, 3);
+	}
+}
+var interval = setInterval(function(){
+	if(document.querySelector('.ELP-F3782') != null && !isHidden(document.querySelector('.ELP-F3782'))) {
+		clearInterval(interval);
+		document.querySelector('.ELP-F3782').querySelector('input[value=\"'+data.funded_way+'\"]').click();
+		var event = document.createEvent('HTMLEvents');
+		event.initEvent("click", true, true);
+		event.eventType = 'message';
+		document.querySelector('.ELP-F3782').dispatchEvent(event);
+		if(data.funded_way == '1') {
+			var interval2 = setInterval(function(){
+				if(!isHidden(document.querySelector('.ELP-F3783').querySelector('textarea'))) {
+					clearInterval(interval2);
+					document.querySelector('.ELP-F3783').querySelector('textarea').value = data.self_funded_detail_fund;
+					goToNextStep();
+				}
+			}, 2000);
+		} else if(data.funded_way == '2') {
+			var interval2 = setInterval(function(){
+				if(document.querySelector('select[title=\"Type of support\"]') != null &&
+					document.querySelector('select[title=\"Type of support\"]').querySelector('option[value=\"'+data.employer_support_type+'\"]') != null) {
+					clearInterval(interval2);
+					document.querySelector('select[title=\"Type of support\"]').querySelector('option[value=\"'+data.employer_support_type+'\"]').selected = true;
+					document.querySelector('.ELP-F3783').querySelector('textarea').value = data.employer_support_detail_fund;
+					goToNextStep();
+				}
+			}, 2000);
+		} else if(data.funded_way == '3') {
+			var interval2 = setInterval(function(){
+				if(document.querySelector('select[title=\"Type of support\"]') != null && 
+					document.querySelector('select[title=\"Type of support\"]').querySelector('option[value=\"'+data.organisation_support_type+'\"]') != null) {
+					clearInterval(interval2);
+					setTimeout(function(){
+						document.querySelector('select[title=\"Type of support\"]').querySelector('option[value=\"'+data.organisation_support_type+'\"]').selected = true;
+						var event = document.createEvent('HTMLEvents');
+						event.initEvent("change", true, true);
+						event.eventType = 'message';
+						document.querySelector('select[title=\"Type of support\"]').dispatchEvent(event);
+						document.querySelector('.ELP-F3783').querySelector('textarea').value = data.organisation_support_detail_fund;
+						var event = document.createEvent('HTMLEvents');
+						event.initEvent("click", true, true);
+						event.eventType = 'message';
+						document.querySelector('select[title=\"Country\"]').dispatchEvent(event);
+						setTimeout(function() {
+							document.querySelector('select[title=\"Country\"]').querySelector('option[value=\"'+data.organisation_support_country+'\"]').selected = true;
+							var event = document.createEvent('HTMLEvents');
+							event.initEvent("change", true, true);
+							event.eventType = 'message';
+							document.querySelector('select[title=\"Country\"]').dispatchEvent(event);
+							document.querySelector('input[title=\"Address\"]').value = data.organisation_support_address;
+							document.querySelector('input[title=\"Address 2\"]').value = data.organisation_support_address_2;
+							var inputInterval = setInterval(function(){
+								if(getVisableInput() != null) {
+									clearInterval(inputInterval);
+									getVisableInput().value = data.organisation_support_suburb_town;
+									var interval3 = setInterval(function(){
+										if(document.querySelector('select[title=\"State or Province\"]') != null &&
+											document.querySelector('select[title=\"State or Province\"]').querySelector('option[value=\"'+data.organisation_support_state_province+'\"]') != null) {
+											clearInterval(interval3);
+											document.querySelector('select[title=\"State or Province\"]').querySelector('option[value=\"'+data.organisation_support_state_province+'\"]').selected = true;
+											document.querySelector('input[title=\"Postal code\"]').value = data.organisation_support_postal_code;
+											goToNextStep();
+										}
+									}, 2000);
+								}
+							}, 2000);
+						}, 2000);
+					}, 5000);
+				}
+			}, 2000);
+		} else if(data.funded_way == '4') {
+			var interval2 = setInterval(function(){
+				if(document.querySelector('select[title=\"Type of support\"]') != null &&
+					document.querySelector('select[title=\"Type of support\"]').querySelector('option[value=\"'+data.person_support_type+'\"]') != null) {
+					clearInterval(interval2);
+					document.querySelector('select[title=\"Type of support\"]').querySelector('option[value=\"'+data.person_support_type+'\"]').selected = true;
+					document.querySelector('.ELP-F3783').querySelector('textarea').value = data.person_support_detail_fund;
+					document.querySelector('select[title=\"Relationship to the applicant\"]').querySelector('option[value=\"'+data.person_support_relationship+'\"]').selected = true;
+					document.querySelector('input[title=\"Family name\"]').value = data.person_support_family_name;
+					document.querySelector('input[title=\"Given names\"]').value = data.person_support_given_names;
+					document.querySelector('input[title=\"Address\"]').value = data.person_support_address;
+					document.querySelector('input[title=\"Address 2\"]').value = data.person_support_address_2;
+					document.querySelector('input[title=\"Suburb / Town\"]').value = data.person_support_suburb_town;
+					var interval3 = setInterval(function(){
+						if(!isHidden(document.querySelector('select[title=\"State or Province\"]'))) {
+							clearInterval(interval3);
+							document.querySelector('select[title=\"State or Province\"]').querySelector('option[value=\"'+data.person_support_state_province+'\"]').selected = true;
+							document.querySelector('input[title=\"Postal code\"]').value = data.person_support_postal_code;
+							goToNextStep();
+						}
+					}, 2000);
+				}
+			}, 2000);
+		}
+	}
+}, 2000);

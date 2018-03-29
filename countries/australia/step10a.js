@@ -1,0 +1,62 @@
+function currentStepFinish(callback){
+	window.cefQuery({
+		request: 'CurrentStepFinish:',
+		onSuccess: function(response) {
+			callback();
+		},
+		onFailure: function(error_code, error_message) {
+			callback();
+		}
+	});
+}
+function isHidden(obj) {var style = null;if(window.getComputedStyle){style = window.getComputedStyle(obj, null);} else {style = obj.currentStyle;}return (style.width=='auto');}
+function findAddConButton() {
+	var spans = document.querySelectorAll('span');
+	var button;
+	for(var index in spans){
+		if(spans[index].innerHTML == 'Relatives, friends or contacts in Australia') {
+			var div = spans[index].parentNode.parentNode.parentNode.parentNode.parentNode;
+			button = div.children[2].children[0].children[1];
+		}
+	}
+	return button;
+}
+function skipStep(callback){
+	window.cefQuery({
+		request: 'SkipStep:',
+		onSuccess: function(response) {
+			callback();
+		},
+		onFailure: function(error_code, error_message) {
+			callback();
+		}
+	});
+}
+var interval = setInterval(function() {
+	if(document.querySelector('.ELP-F3707') != null && !isHidden(document.querySelector('.ELP-F3707'))
+		&& document.querySelector('select[title=\"Length of stay in Australia\"]')!=null
+		&& document.querySelector('select[title=\"Length of stay in Australia\"]').querySelector('option[value=\"'+data.stay_length+'\"]') != null) {
+		clearInterval(interval);
+		document.querySelector('.ELP-F3707').querySelector('input[value=\"2\"]').click();
+		document.querySelector('select[title=\"Length of stay in Australia\"]').querySelector('option[value=\"'+data.stay_length+'\"]').selected = true;
+		document.querySelector('input[title=\"Planned arrival date\"]').value = data.from_date;
+		document.querySelector('input[title=\"Planned final departure date\"]').value = data.to_date;
+		document.querySelector('.ELP-F3780').querySelector('input[value=\"2\"]').click();
+		if(data.applying_stream == '29' || data.applying_stream == '30') {
+			document.querySelector('.ELP-F3785').querySelector('input[value=\"'+data.has_contacts+'\"]').click();
+			if(data.has_contacts == '1') {
+				var button = findAddConButton();
+				var interval2 = setInterval(function(){
+					if(!isHidden(button)) {
+						clearInterval(interval2);
+						currentStepFinish(function(){button.click();});
+					}
+				}, 1000);
+			} else {
+				skipStep(function(){console.log('step10a skip');});
+			}
+		} else {
+			skipStep(function(){console.log('step10a skip');});
+		}
+	}
+}, 1000);

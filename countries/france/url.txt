@@ -1,0 +1,3 @@
+login=https://fr.tlscontact.com/cn/SHA/login.php
+create_new_app=https://fr.tlscontact.com/cn/SHA/myapp.php
+confirm=https://fr.tlscontact.com/cn/SHA/myapp.php

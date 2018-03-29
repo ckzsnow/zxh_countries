@@ -1,0 +1,77 @@
+function currentStepFinish(callback){
+	window.cefQuery({
+		request: 'CurrentStepFinish:',
+		onSuccess: function(response) {
+			callback();
+		},
+		onFailure: function(error_code, error_message) {
+			callback();
+		}
+	});
+}
+function isHidden(obj) {var style = null;if(window.getComputedStyle){style = window.getComputedStyle(obj, null);} else {style = obj.currentStyle;}return (style.width=='auto');}
+function setRemainedInfo(){
+	var interval = setInterval(function(){
+		if(document.querySelector('select[title=\"Select an option\"]') != null
+			&& document.querySelector('select[title=\"Select an option\"]').querySelector('option[value=\"'+data.visit_reasons+'\"]') != null) {
+			clearInterval(interval);
+			var event = document.createEvent('HTMLEvents');
+			event.initEvent("click", true, true);
+			event.eventType = 'message';
+			document.querySelector('select[title=\"Select an option\"]').dispatchEvent(event);
+			setTimeout(function(){
+				document.querySelector('select[title=\"Select an option\"]').querySelector('option[value=\"'+data.visit_reasons+'\"]').selected=true;
+				var event = document.createEvent('HTMLEvents');
+				event.initEvent("change", true, true);
+				event.eventType = 'message';
+				document.querySelector('select[title=\"Select an option\"]').dispatchEvent(event);
+				setTimeout(function(){
+					document.querySelector('.ELP-F3767 textarea').value = data.date_detail;
+					document.querySelector('.ELP-F4001').querySelector('input[value=\"2\"]').click();
+					var intervalCKZ = setInterval(function(){
+						if(document.querySelector('.ELP-F3704') != null && !isHidden(document.querySelector('.ELP-F3704'))){
+							clearInterval(intervalCKZ);
+							document.querySelector('.ELP-F3704').querySelector('input[value=\"2\"]').click();
+							currentStepFinish(function(){document.querySelector('button[title=\"Go to next page\"]').click();});
+						}
+					}, 2000);
+				}, 2000);
+			}, 2000);
+		}
+	}, 2000);
+}
+var interval = setInterval(function(){
+	if(document.querySelector('body').getAttribute('data-wc-domready') != null && 
+		document.querySelector('body').getAttribute('data-wc-domready') == 'true'){
+		clearInterval(interval);
+		document.querySelector('.ELP-F3750').querySelector('input[value=\"1\"]').click();
+		var event = document.createEvent('HTMLEvents');
+		event.initEvent("click", true, true);
+		event.eventType = 'message';
+		document.querySelector('.ELP-F3750').dispatchEvent(event);
+		var interval2 = setInterval(function() {
+			if(!isHidden(document.querySelector('select[title=\"Current location\"]')) 
+				&& document.querySelector('select[title=\"Current location\"]') != null
+				&& document.querySelector('select[title=\"Current location\"]').querySelector('option[value=\"PRCH\"]') != null
+				&& document.querySelector('select[title=\"Legal status\"]') != null
+				&& document.querySelector('select[title=\"Legal status\"]').querySelector('option[value=\"1\"]') != null) {
+				clearInterval(interval2);
+				document.querySelector('select[title=\"Current location\"]').querySelector('option[value=\"PRCH\"]').selected=true;
+				document.querySelector('select[title=\"Legal status\"]').querySelector('option[value=\"1\"]').selected=true;
+				document.querySelector('.ELP-F3765').querySelector('input[value=\"'+data.applying_stream+'\"]').click();
+				if(data.applying_stream == '61') {
+					var interval3 = setInterval(function(){
+						if(!isHidden(document.querySelector('.ELP-F1903'))) {
+							clearInterval(interval3);
+							document.querySelector('.ELP-F1903').querySelector('input[value=\"'+data.stay_purpose+'\"]').click();
+							document.querySelector('.ELP-F1902 input').value = data.lodgement_num;
+							setRemainedInfo();
+						}
+					}, 2000);
+				} else {
+					setRemainedInfo();
+				}
+			}
+		}, 2000);
+	}
+}, 2000);
