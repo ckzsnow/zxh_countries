@@ -1,20 +1,3 @@
-var nodeoptions = document.querySelector('#countryname_id').querySelectorAll('option');
-var infos = "";
-for(var index in nodeoptions){
-	infos = infos + nodeoptions[index].value + ":" + nodeoptions[index].innerHTML + ","
-}
-console.log(infos);
-进入方式
-1:SINGLE,4:TRIPLE,3:DOUBLE,2:MULTIPLE
-以前的签证类型
-1:BUSINESS VISA,4:CONFERENCE VISA,11:DIPLOMATIC VISA,87:DOUBLE ENTRY,9:EMPLOYMENT  VISA,6:ENTRY VISA,84:FILM VISA,85:INTERN VISA,8:JOURNALIST VISA,13:MEDICAL ATTENDANT,16:MEDICAL VISA,7:MISSIONARY VISA,63:MOUNTAINEERING VISA,12:OFFICIAL VISA,64:PILGRIMES VISA,65:PROJECT VISA,66:RESEARCH VISA,2:STUDENT VISA,3:TOURIST VISA,5:TRANSIT VISA,86:UN DIPLOMAT,17:UN OFFICIAL,76:VISIT VISA
-
-
-var data = {nameofComp:'xxx',addofComp:'xxx',phofComp:'18601615519',emailofComp:'test@qq.com',duration:'6',visa_entry_id:'2',entrypoint:'MUBAI',exitpoint:'',jouryney_id_visa_detail:'29/03/2018',
-old_visa_flag1:'yes',prv_visit_add1:'xxxx',prv_visit_add2:'',prv_visit_add3:'',visited_city:'MUBAI',old_visa_no:'VM12345678',old_visa_type_id:'1',
-oldvisaissueplace:'SHANGHAI',oldvisaissuedate:'01/03/2002',country_visited:'2010 JAPAN',nameofsponsor_ind:'xxx',add1ofsponsor_ind:'xxx',add2ofsponsor_ind:'',
-phoneofsponsor_ind:'18601615519',nameofsponsor_msn:'xxx',add1ofsponsor_msn:'xxx',add2ofsponsor_msn:'',phoneofsponsor_msn:'18601615519',refuse_flag1:'no',refuse_details:'',
-saarc_flag1:'yes'};
 function currentStepFinish(callback){
 	window.cefQuery({
 		request: 'CurrentStepFinish:',

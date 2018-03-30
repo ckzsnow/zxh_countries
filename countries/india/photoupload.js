@@ -1,5 +1,3 @@
-格式jpeg,大小10KB-1MB，最小像素350*350，照片需要手动修改成长款相等
-
 function currentStepFinish(callback){
 	window.cefQuery({
 		request: 'CurrentStepFinish:',
@@ -36,8 +34,10 @@ var interval = setInterval(function(){
 			request: 'ClickRegion:'+inputPosX+'###'+inputPosY+'###'+inputWidth+'###'+inputHeight + '###',
 			onSuccess: function(response) {
 				var fileInterval = setInterval(function(){
+					console.log('enter file upload interval.....');
 					if(document.querySelector('input[type=\"file\"]').value != ''){
 						clearInterval(fileInterval);
+						console.log('photoupload clear upload fileInterval');
 						currentStepFinish(function(){document.querySelector('#continue').click();});
 					}
 				}, 3000);
